@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,9 +28,14 @@ class GuessTheFlagActivity : ComponentActivity() {
 @Composable
 fun GuessTheFlagScreen(){
     Surface (modifier = Modifier.fillMaxSize()){
-        Column (modifier = Modifier.padding(18.dp)){
-            HomeScreenBar("Play & Win - Guess The Flag")
-            GuessTheFlag()
+        LazyColumn (modifier = Modifier.padding(18.dp)){
+
+            item {           HomeScreenBar("Play & Win - Guess The Flag")}
+
+            item {
+                GuessTheFlag()
+            }
+
 
 
         }

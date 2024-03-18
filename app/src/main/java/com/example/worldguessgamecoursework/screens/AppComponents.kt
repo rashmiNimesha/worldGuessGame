@@ -1,8 +1,10 @@
 package com.example.worldguessgamecoursework.screens
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,128 +46,145 @@ import com.example.worldguessgamecoursework.data.themeColor
 
 @Composable
 fun HomeScreenBar(value: String) {
-    Column {
-     Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF75A488)),
-            verticalAlignment = Alignment.CenterVertically,
+    LazyColumn{
+
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF75A488)),
+                verticalAlignment = Alignment.CenterVertically,
 
 
-            ) {
-            Text(
-                modifier = Modifier.padding(10.dp),
-                text = "WorldGuess Game",
-                fontFamily = FontFamily.SansSerif,
-                color = Color.Black,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                ) {
+                Text(
+                    modifier = Modifier.padding(10.dp),
+                    text = "WorldGuess Game",
+                    fontFamily = FontFamily.SansSerif,
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
 
 
+                    )
+                Spacer(
+                    modifier = Modifier.weight(1f)
                 )
-            Spacer(
-                modifier = Modifier.weight(1f)
-            )
-            Image(
-                modifier = Modifier
-                    .size(80.dp)
-                    .padding(10.dp),
-                painter = painterResource(id = R.drawable.ad),
-                contentDescription = ""
-            )
+                Image(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(10.dp),
+                    painter = painterResource(id = R.drawable.ad),
+                    contentDescription = ""
+                )
 
+            }
         }
-        Row (modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center){
-            Text(text = value,
-                color = Color(0xFF75A488),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(5.dp)
-                    .align(alignment = Alignment.CenterVertically))
 
+        item {
+            Row (modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center){
+                Text(text = value,
+                    color = Color(0xFF75A488),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .align(alignment = Alignment.CenterVertically))
+
+            }
         }
+
+
     }
 
 }
 
 @Composable
 fun ButtonDisplay(onClicked: (String) -> Unit ){
-    Column (modifier = Modifier
+    LazyColumn (modifier = Modifier
         .padding(vertical = 20.dp)
         .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        Row (modifier = Modifier.padding(vertical = 10.dp) ){
-            Button(
-                onClick = {
-                    onClicked("GuessTheCountryActivity")
+
+
+        item {
+            Row (modifier = Modifier.padding(vertical = 10.dp) ){
+                Button(
+                    onClick = {
+                        onClicked("GuessTheCountryActivity")
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF75A488)),
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .width(200.dp),
+                ) {
+                    Text("Guess the Country",
+                        fontSize = 17.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
+
+        item {
+            Row (modifier = Modifier.padding(vertical = 10.dp)){
+                Button(onClick = {
+                    onClicked("GuessTheHintActivity")
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF75A488)),
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(200.dp),
-            ) {
-                Text("Guess the Country",
-                    fontSize = 17.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-        }
-        Row (modifier = Modifier.padding(vertical = 10.dp)){
-            Button(onClick = {
-                onClicked("GuessTheHintActivity")
-            },
-                colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(200.dp),
-            ) {
-                Text("Guess the Hint",
-                    color = Color.White,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Medium)
-            }
-        }
-        Row (modifier = Modifier.padding(vertical = 10.dp)){
-            Button(onClick = {
-                             onClicked("GuessTheFlagActivity")
-
-            },
-                colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(200.dp),
-            ) {
-                Text("Guess the Flag",
-                    color = Color.White,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Medium)
+                    colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .width(200.dp),
+                ) {
+                    Text("Guess the Hint",
+                        color = Color.White,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Medium)
+                }
             }
         }
 
-        Row (modifier = Modifier.padding(vertical = 10.dp)){
-            Button(onClick = {
-                             onClicked("AdvancedLevelActivity")
+        item {
+            Row (modifier = Modifier.padding(vertical = 10.dp)){
+                Button(onClick = {
+                    onClicked("GuessTheFlagActivity")
 
-            },
-                colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(200.dp),
-            ) {
-                Text("Advanced level",
-                    color = Color.White,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Medium)
+                },
+                    colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .width(200.dp),
+                ) {
+                    Text("Guess the Flag",
+                        color = Color.White,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Medium)
+                }
             }
         }
 
+        item {
+            Row (modifier = Modifier.padding(vertical = 10.dp)){
+                Button(onClick = {
+                    onClicked("AdvancedLevelActivity")
 
-
+                },
+                    colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .width(200.dp),
+                ) {
+                    Text("Advanced level",
+                        color = Color.White,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Medium)
+                }
+            }
+        }
     }
 
 }
@@ -174,114 +194,124 @@ fun ButtonDisplay(onClicked: (String) -> Unit ){
 @Composable
 fun GuessTheCountry() {
     var randomFlagDisplay by remember { mutableStateOf(generateRandomFlag())}
-    var selectedFlagName by remember { mutableStateOf("") }
+    var selectedFlagName by remember{ mutableStateOf("") }
     var submitResult by remember { mutableStateOf("") }
     val correct = "CORRECT!"
     val wrong = "WRONG!"
     var showResult by remember { mutableStateOf(false) }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Display the flag image
-        Image(
-            painter = painterResource(id = randomFlagDisplay.imagePath),
-            contentDescription = randomFlagDisplay.flagName,
-            modifier = Modifier
-                .size(250.dp)
-            //.clip(shape = RoundedCornerShape(8.dp))
-        )
-
-
-        if (!showResult) {
-            Button(onClick = {
-
-                submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
-                    correct
-                } else {
-                    wrong
-                }
-                showResult = true
-
-            },
-                colors = ButtonDefaults.buttonColors(themeColor),
+        item{
+            Image(
+                painter = painterResource(id = randomFlagDisplay.imagePath),
+                contentDescription = randomFlagDisplay.flagName,
                 modifier = Modifier
-                    .padding(2.dp)
-                    .width(150.dp)
-                    .height(40.dp)
-            ) {
-                Text("Submit",
-                    fontSize = buttonFontSize,
-                    style = TextStyle(fontWeight = FontWeight.Bold),
-                    color = Color.White)
+                    .size(250.dp)
+                //.clip(shape = RoundedCornerShape(8.dp))
+            )
+        }
+        // Display the flag image
+
+item {
+    if (!showResult) {
+        Button(onClick = {
+
+            submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
+                correct
+            } else {
+                wrong
             }
-        } else {
+            showResult = true
+
+        },
+            colors = ButtonDefaults.buttonColors(themeColor),
+            modifier = Modifier
+                .padding(2.dp)
+                .width(150.dp)
+                .height(40.dp)
+        ) {
+            Text("Submit",
+                fontSize = buttonFontSize,
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                color = Color.White)
+        }
+    } else {
+        Text(
+            text = submitResult,
+            color = if(submitResult == correct) Color.Green else Color.Red,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+        if (submitResult == wrong) {
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = submitResult,
-                color = if(submitResult == correct) Color.Green else Color.Red,
-                fontSize = 20.sp,
+                text = "Correct Answer : ${randomFlagDisplay.flagName}",
+                color = Color.Red,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            if (submitResult == wrong) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Correct Answer : ${randomFlagDisplay.flagName}",
-                    color = Color.Red,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = {
-                randomFlagDisplay = generateRandomFlag()
-                selectedFlagName = ""
-                submitResult = ""
-                showResult = false
-            },
-                colors = ButtonDefaults.buttonColors(themeColor),
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(150.dp)
-                    .height(40.dp)
-            ) {
-                Text("Next",
-                    color = Color.White,
-                    fontSize = buttonFontSize,
-                    fontWeight = FontWeight.Medium)
-            }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Display list of flag names
-        LazyColumn() {
-            item {
-                FlagData.flagsList.forEach { flag ->
-                    Text(
-                        text = flag.flagName,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        textDecoration = if (flag.flagName == selectedFlagName) TextDecoration.Underline else TextDecoration.None,
-                        color = if (flag.flagName == selectedFlagName) Color.Blue else Color.Black,
-                        modifier = Modifier
-                            .clickable {
-                                if (!showResult) {
-                                    selectedFlagName = flag.flagName
+        Button(onClick = {
+            randomFlagDisplay = generateRandomFlag()
+            selectedFlagName = ""
+            submitResult = ""
+            showResult = false
+        },
+            colors = ButtonDefaults.buttonColors(themeColor),
+            modifier = Modifier
+                .padding(2.dp)
+                .width(150.dp)
+                .height(40.dp)
+        ) {
+            Text("Next",
+                color = Color.White,
+                fontSize = buttonFontSize,
+                fontWeight = FontWeight.Medium)
+        }
+    }
+    Spacer(modifier = Modifier.height(10.dp))
 
+}
+
+        item {
+
+            // Display list of flag names
+            LazyColumn() {
+                item {
+                    FlagData.flagsList.forEach { flag ->
+                        Text(
+                            text = flag.flagName,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            textDecoration = if (flag.flagName == selectedFlagName) TextDecoration.Underline else TextDecoration.None,
+                            color = if (flag.flagName == selectedFlagName) Color.Blue else Color.Black,
+                            modifier = Modifier
+                                .clickable {
+                                    if (!showResult) {
+                                        selectedFlagName = flag.flagName
+
+                                    }
                                 }
-                            }
 
-                            .padding(vertical = 4.dp)
+                                .padding(vertical = 4.dp)
 
 
-                    )
+                        )
+                    }
                 }
             }
         }
+
+
+
+
     }
 }
 
@@ -508,19 +538,30 @@ fun generateOptions(currentFlag_: Flag): List<Flag> {
 @Composable
 fun AdvancedLevel(){
   //  var currentFlag by remember { mutableStateOf(FlagData.flagsList.random()) }
-    var flagOptions by remember { mutableStateOf(generateRandomFlags_()) }
+    var flagOptions by rememberSaveable { mutableStateOf(generateRandomFlags_()) }
     var guess by remember { mutableStateOf(List(flagOptions.size) { "" }) }
     val (guesses, setGuesses) = remember { mutableStateOf(List(flagOptions.size) { "" }) }
- var msg: String =""
+ var msg by remember { mutableStateOf("") }
+    var submit by remember {
+        mutableStateOf(false)
+    }
 
     fun checkAnswers() {
-        val result = flagOptions.indices.map { index ->
-            msg = if (flagOptions[index].flagName.equals(guess[index], ignoreCase = true)) {
-               "Correct"
-            } else {
-                "Wrong"
+        var allCorrect = true
+        flagOptions.indices.forEach { index ->
+           if (!flagOptions[index].flagName.equals(guess[index], ignoreCase = true)) {
+                allCorrect = false
             }
         }
+        submit = false
+        msg = if (allCorrect) {
+            "Correct"
+        }
+        else{
+            "Wrong"
+        }
+
+
 
     }
 
@@ -531,8 +572,6 @@ fun AdvancedLevel(){
 
             flagOptions.forEachIndexed{index, flag_->
                 FlagImageAdvanced(flag = flag_) {
-
-
 
                 }
 
@@ -569,11 +608,38 @@ fun AdvancedLevel(){
                 TextField(
                     value = guess[index],
                     onValueChange = { newValue ->
+
                         // Update guess
-                        guess = guess.toMutableList().also { it[index] = newValue }
+                        if(!submit){
+                            guess = guess.toMutableList().also { it[index] = newValue }
+                        }
+
                     },
-                    modifier = Modifier.padding(bottom = 20.dp)
-                )
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                        .background(
+                            if (submit && guess[index].equals(
+                                    flagOptions[index].flagName,
+                                    ignoreCase = false
+                                )
+                            ) Color.LightGray else Color.Red
+                        )
+
+                        .border(
+                            BorderStroke(
+                                width = 1.dp,
+                                color = if (submit && guess[index].equals(
+                                        flagOptions[index].flagName,
+                                        ignoreCase = true
+                                    )
+                                ) Color.Green else Color.Red
+                            )
+
+                        ))
+
+
+//
+
             }
         }
         Column (modifier = Modifier.align(Alignment.CenterHorizontally)){
