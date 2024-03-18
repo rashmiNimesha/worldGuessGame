@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WorldGuessGameCoursework"
+        tools:targetApi="31">
+        <activity
+            android:name=".screens.AdvancedLevelActivity"
+            android:exported="false"
+            android:label="@string/title_activity_advanced_level"
+            android:theme="@style/Theme.WorldGuessGameCoursework" />
+        <activity
+            android:name=".screens.GuessTheFlagActivity"
+            android:exported="false"
+            android:label="@string/title_activity_guess_the_flag"
+            android:theme="@style/Theme.WorldGuessGameCoursework" />
+        <activity
+            android:name=".screens.GuessTheHintActivity"
+            android:exported="false"
+            android:label="@string/title_activity_guess_the_hint"
+            android:theme="@style/Theme.WorldGuessGameCoursework" />
+        <activity
+            android:name=".screens.GuessTheCountryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_guess_the_country"
+            android:theme="@style/Theme.WorldGuessGameCoursework" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.WorldGuessGameCoursework">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
