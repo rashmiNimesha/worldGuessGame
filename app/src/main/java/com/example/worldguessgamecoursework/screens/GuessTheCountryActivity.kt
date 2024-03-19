@@ -4,10 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.worldguessgamecoursework.R
 import com.example.worldguessgamecoursework.data.Flag
 import com.example.worldguessgamecoursework.data.FlagData
 import com.example.worldguessgamecoursework.data.buttonFontSize
@@ -57,7 +63,7 @@ class GuessTheCountryActivity : ComponentActivity() {
 @Composable
 fun GuessTheCountryScreen() {
     var randomFlagDisplay by remember { mutableStateOf(FlagData.flagsList.random()) }
-    var selectedFlagName by remember { mutableStateOf("") }
+    var selectedFlagName by remember{ mutableStateOf("") }
     var submitResult by remember { mutableStateOf("") }
     val correct = "CORRECT!"
     val wrong = "WRONG!"
@@ -71,11 +77,52 @@ fun GuessTheCountryScreen() {
 
     ) {
 
-
         item {
-            HomeScreenBar(value = "Play and win- Guess the country")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF75A488)),
+                verticalAlignment = Alignment.CenterVertically,
+
+
+                ) {
+                Text(
+                    modifier = Modifier.padding(10.dp),
+                    text = "WorldGuess Game",
+                    fontFamily = FontFamily.SansSerif,
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+
+
+                    )
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Image(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(10.dp),
+                    painter = painterResource(id = R.drawable.ad),
+                    contentDescription = ""
+                )
+
+            }
         }
 
+        item {
+            Row (modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center){
+                Text(text = "Play and Win, Country Flag",
+                    color = Color(0xFF75A488),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .align(alignment = Alignment.CenterVertically))
+
+            }
+        }
         item {
             Image(
                 painter = painterResource(id = randomFlagDisplay.imagePath),
@@ -84,10 +131,10 @@ fun GuessTheCountryScreen() {
                     .size(250.dp)
                 //.clip(shape = RoundedCornerShape(8.dp))
             )
-        }
-        // Display the flag image
+            //  }
+            // Display the flag image
 
-        item {
+            //   item {
             if (!showResult) {
                 Button(
                     onClick = {
@@ -155,9 +202,9 @@ fun GuessTheCountryScreen() {
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-        }
+            //  }
 
-        item {
+            //     item {
 
             // Display list of flag names
 //            LazyColumn() {
@@ -182,18 +229,12 @@ fun GuessTheCountryScreen() {
 
                 )
             }
+            //  }
         }
-    }
-
 
 
     }
-
-
-//        }
-//    }
-
-    // Function to generate a random flag
+}
 
 
 

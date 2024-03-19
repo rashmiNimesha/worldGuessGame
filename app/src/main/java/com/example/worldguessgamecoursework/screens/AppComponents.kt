@@ -560,9 +560,6 @@ fun AdvancedLevel(){
         else{
             "Wrong"
         }
-
-
-
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -665,9 +662,9 @@ fun FlagImageAdvanced(flag: Flag, onClick: () -> Unit) {
         painter = painterResource(id = flag.imagePath),
         contentDescription = flag.flagName,
         modifier = Modifier
-            .size(120.dp)
-            .padding(6.dp),
-        contentScale = ContentScale.Crop
+            .size(125.dp)
+            .padding(4.dp),
+     //   contentScale = ContentScale.Crop
         )
 }
 
