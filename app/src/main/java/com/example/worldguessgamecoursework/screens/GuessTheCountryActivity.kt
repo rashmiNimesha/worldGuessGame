@@ -1,8 +1,10 @@
 package com.example.worldguessgamecoursework.screens
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,10 +21,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +54,8 @@ import com.example.worldguessgamecoursework.data.FlagData
 import com.example.worldguessgamecoursework.data.buttonFontSize
 import com.example.worldguessgamecoursework.data.themeColor
 import com.example.worldguessgamecoursework.screens.ui.theme.WorldGuessGameCourseworkTheme
+import kotlinx.coroutines.delay
+import kotlin.concurrent.timer
 
 class GuessTheCountryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +77,58 @@ fun GuessTheCountryScreen() {
     val correct = "CORRECT!"
     val wrong = "WRONG!"
     var showResult by remember { mutableStateOf(false) }
+    // Countdown timer state
+    var timerSeconds by remember { mutableStateOf(10) }
+
+//    LaunchedEffect(key1 = timerSeconds) {
+//        if (timerSeconds > 0) {
+//            delay(1000)
+//            timerSeconds--
+//            if(showResult){
+//                if (timerSeconds > 0) {
+//                    delay(1000)
+//                    timerSeconds--
+//                }
+//                else{
+//                    submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
+//                        correct
+//                    } else {
+//                        wrong
+//                    }
+//                    showResult = true
+//                    // Reset timer for the next round
+//
+//                }
+//
+//            }
+//        } else {
+//            // Time's up: Auto-submit
+//            submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
+//                correct
+//            } else {
+//                wrong
+//            }
+//            showResult = false
+//            // Reset timer for the next round
+//            timerSeconds = 10
+//        }
+//    }
+
+    LaunchedEffect(key1 = timerSeconds) {
+        if (timerSeconds > 0) {
+            delay(1000)
+            timerSeconds--
+        } else {
+            // Time's up: Auto-submit
+            submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
+                correct
+            } else {
+                wrong
+            }
+            showResult = true
+
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -76,6 +137,7 @@ fun GuessTheCountryScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
+
 
         item {
             Row(
@@ -123,6 +185,12 @@ fun GuessTheCountryScreen() {
 
             }
         }
+        item {
+            // Display the countdown timer
+
+            Text(text = timerSeconds.toString())
+        }
+
         item {
             Image(
                 painter = painterResource(id = randomFlagDisplay.imagePath),
@@ -181,10 +249,13 @@ fun GuessTheCountryScreen() {
 
                 Button(
                     onClick = {
+                        timerSeconds =10
                         randomFlagDisplay = FlagData.flagsList.random()
                         selectedFlagName = ""
                         submitResult = ""
                         showResult = false
+
+
                     },
                     colors = ButtonDefaults.buttonColors(themeColor),
                     modifier = Modifier
@@ -225,14 +296,9 @@ fun GuessTheCountryScreen() {
                         }
 
                         .padding(vertical = 4.dp)
-
-
                 )
             }
-            //  }
         }
-
-
     }
 }
 

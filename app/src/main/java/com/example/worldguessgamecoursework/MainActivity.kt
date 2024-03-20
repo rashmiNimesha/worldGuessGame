@@ -21,6 +21,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(onClicked: (String)-> Unit){
-
+    var countdownEnabled by remember { mutableStateOf(false) }
     LazyColumn( modifier = Modifier
         .fillMaxSize()
         .padding(18.dp),
@@ -143,6 +147,9 @@ fun HomeScreen(onClicked: (String)-> Unit){
             Row (modifier = Modifier.padding(vertical = 10.dp)){
                 Button(onClick = {
                     onClicked("GuessTheHintActivity")
+                    if(countdownEnabled == true){
+
+                    }
                 },
                     colors = ButtonDefaults.buttonColors(containerColor  = Color(0xFF75A488)),
                     modifier = Modifier
@@ -195,8 +202,31 @@ fun HomeScreen(onClicked: (String)-> Unit){
             }
         }
 
+        item {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                androidx.compose.material3.Switch(
+                    checked = countdownEnabled,
+                    onCheckedChange = { countdownEnabled = it },
+                    colors = androidx.compose.material3.SwitchDefaults.colors(
+                        checkedThumbColor = Color.Green,
+                        uncheckedThumbColor = Color.Red
+                    ),
+                    modifier = Modifier.padding(5.dp)
+                )
+                Text(
+                    text = "Enable Countdown Timer",
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+
 
     }
+
 
 }
 
