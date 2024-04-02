@@ -5,9 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,10 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,15 +31,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worldguessgamecoursework.R
-import com.example.worldguessgamecoursework.data.Flag
 import com.example.worldguessgamecoursework.data.FlagData
 import com.example.worldguessgamecoursework.data.buttonFontSize
 import com.example.worldguessgamecoursework.data.themeColor
-import com.example.worldguessgamecoursework.screens.ui.theme.WorldGuessGameCourseworkTheme
+import kotlinx.coroutines.delay
 
 class GuessTheFlagActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +56,18 @@ fun GuessTheFlagScreen() {
         var flagOptions by remember { mutableStateOf(generateOptions(currentFlag)) }
         var showMessage by remember { mutableStateOf(false) }
         var message by remember { mutableStateOf("") }
+    var timerSeconds by remember { mutableStateOf(10) }
+
+    var timerrunning by remember { mutableStateOf(true) }
+    LaunchedEffect(key1 = timerSeconds, timerrunning) {
+        while (timerrunning && timerSeconds > 0) {
+            delay(1000)
+            timerSeconds--
+        }
+        if (timerSeconds == 0) {
+            message = "Time's up!"
+        }
+    }
 
         LazyColumn(
             modifier = Modifier
@@ -105,7 +112,7 @@ fun GuessTheFlagScreen() {
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ){
-                    Text(text = "Play and Win, Home Page",
+                    Text(text = "Play and Win, Guess the Flag",
                         color = Color(0xFF75A488),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -114,6 +121,19 @@ fun GuessTheFlagScreen() {
                             .align(alignment = Alignment.CenterVertically))
 
                 }
+            }
+            item {
+                Spacer(modifier = Modifier.height(6.dp))
+                // Display the countdown timer
+                Row {
+                    Text(text = "Timer : ",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp)
+                    Text(text = timerSeconds.toString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp)
+                }
+
             }
 
             item {
@@ -131,21 +151,28 @@ fun GuessTheFlagScreen() {
                     FlagImage(
                         flag = flag_,
                         onClick = {
+
                             showMessage = true
-                            message = if (flag_.flagName == currentFlag.flagName) {
-                                "CORRECT !!"
+                         if (flag_.flagName == currentFlag.flagName) {
+                                message = "CORRECT !!"
+                                timerrunning = false
 
                             } else {
-                                "WRONG !! "
+                                message = "WRONG !! "
+                                timerrunning = false
 
                             }
+
+
 //                        currentFlag = FlagData.flagsList.random()
 //                        currentOptions = generateOptions(currentFlag)
-                        }
+                        },
+
 
                     )
 
                 }
+
                 Spacer(modifier = Modifier.height(10.dp))
             }
 
@@ -162,6 +189,8 @@ fun GuessTheFlagScreen() {
             item {
                 Button(
                     onClick = {
+                        timerSeconds = 10
+                        timerrunning= true
                         currentFlag = FlagData.flagsList.random()
                         flagOptions = generateOptions(currentFlag)
                         message = ""
@@ -186,29 +215,30 @@ fun GuessTheFlagScreen() {
         }
 
 
-
-    @Composable
-    fun FlagImage(flag: Flag, onClick: () -> Unit) {
-        Image(
-            painter = painterResource(id = flag.imagePath),
-            contentDescription = flag.flagName,
-            modifier = Modifier
-                .size(150.dp)
-                .clickable(onClick = onClick),
-
-            )
-    }
-
-    fun generateOptions(currentFlag_: Flag): List<Flag> {
-        val options = mutableListOf(currentFlag_)
-        while (options.size < 3) {
-            val randomDog = FlagData.flagsList.random()
-            if (randomDog !in options) {
-                options.add(randomDog)
-            }
-        }
-        return options.shuffled()
-    }
+//
+//    @Composable
+//    fun FlagImage(flag: Flag, onClick: () -> Unit) {
+//        Image(
+//            painter = painterResource(id = flag.imagePath),
+//            contentDescription = flag.flagName,
+//            modifier = Modifier
+//                .size(150.dp)
+//                .clickable(onClick = onClick),
+//
+//
+//            )
+//    }
+//
+//    fun generateOptions(currentFlag_: Flag): List<Flag> {
+//        val options = mutableListOf(currentFlag_)
+//        while (options.size < 3) {
+//            val randomDog = FlagData.flagsList.random()
+//            if (randomDog !in options) {
+//                options.add(randomDog)
+//            }
+//        }
+//        return options.shuffled()
+//    }
 
 
 }

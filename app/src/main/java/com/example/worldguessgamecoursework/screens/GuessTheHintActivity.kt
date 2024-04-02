@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,13 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.worldguessgamecoursework.R
 import com.example.worldguessgamecoursework.data.buttonFontSize
 import com.example.worldguessgamecoursework.data.themeColor
-import com.example.worldguessgamecoursework.screens.ui.theme.WorldGuessGameCourseworkTheme
 
 class GuessTheHintActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +59,11 @@ fun GuessTheHintScreen(){
 //      var dashesCountryName by remember {
 //          mutableStateOf(countryNameHas.value)
 //      }
-    var message by remember {
-        mutableStateOf("")
-    }
+    var message by remember { mutableStateOf("") }
+    var buttonText by remember { mutableStateOf("Submit") }
+
+
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -136,6 +133,7 @@ fun GuessTheHintScreen(){
         }
 
         item {
+
             Text(
                 text = countryNameHas.value,
                 modifier = Modifier.padding(bottom = 36.dp)
@@ -170,14 +168,13 @@ fun GuessTheHintScreen(){
             // Button to submit guess
             Button(
                 onClick = {
-
-
                     if (guess.isNotBlank()) {
                         val guessedCountry = countryNameHas.value.replace(" ", "").lowercase()
 
 
-                        if (guessedCountry.equals(countryName.lowercase())) {
-                            message = "Coorect"
+                        if (guessedCountry.lowercase() == countryName.lowercase()) {
+                            message = "Correct"
+
                         } else {
                             val guessedChar = guess.first().lowercaseChar()
                             if (guessedChar in countryName) {
@@ -188,8 +185,6 @@ fun GuessTheHintScreen(){
                                     if (it.lowercaseChar() in guessedLetters || it.lowercaseChar() == guessedChar) it else "_"
                                 }.joinToString(" ")
                                 countryNameHas.value = updatedString
-
-
                             }
                             // Clear the guess text field
                             setGuess("")
@@ -220,11 +215,6 @@ fun GuessTheHintScreen(){
             Text(text = message)
             Spacer(modifier = Modifier.height(20.dp))
         }
-
-
-
-
-
     }
 }
 

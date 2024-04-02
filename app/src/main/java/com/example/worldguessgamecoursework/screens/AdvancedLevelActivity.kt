@@ -53,8 +53,7 @@ fun AdvancedLevelScreen(){
     var guess by remember { mutableStateOf(List(flagOptions.size) { "" }) }
     val (guesses, setGuesses) = remember { mutableStateOf(List(flagOptions.size) { "" }) }
     var msg by remember { mutableStateOf("") }
-    var submit by remember {
-        mutableStateOf(false)}
+    var submit by remember {mutableStateOf(false)}
 
     fun checkAnswers() {
         var allCorrect = true

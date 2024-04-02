@@ -500,25 +500,23 @@ fun GuessTheFlag() {
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 color = Color.White,
             )
-
         }
-
-
-
     }
 }
 
 @Composable
-fun FlagImage(flag: Flag, onClick: () -> Unit) {
+fun FlagImage(flag: Flag, onClick: () -> Unit,  ) {
     Image(
-        painter = painterResource(id = flag.imagePath),
+        painterResource(id = flag.imagePath),
         contentDescription = flag.flagName,
-        modifier = Modifier
+        Modifier
             .size(150.dp)
             .clickable(onClick = onClick),
-
-        )
+    )
 }
+
+
+
 
 fun generateOptions(currentFlag_: Flag): List<Flag> {
     val options = mutableListOf(currentFlag_)
@@ -633,10 +631,6 @@ fun AdvancedLevel(){
                             )
 
                         ))
-
-
-//
-
             }
         }
         Column (modifier = Modifier.align(Alignment.CenterHorizontally)){
@@ -645,12 +639,9 @@ fun AdvancedLevel(){
             }) {
                 Text(text = "Submit")
             }
-
             Text(text = msg)
         }
-
     }
-
 }
 
 
