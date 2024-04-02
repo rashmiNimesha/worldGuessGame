@@ -64,9 +64,9 @@ fun GuessTheFlagScreen() {
             delay(1000)
             timerSeconds--
         }
-        if (timerSeconds == 0) {
-            message = "Time's up!"
-        }
+//        if (timerSeconds == 0) {
+//            message = "Time's up!"
+//        }
     }
 
         LazyColumn(

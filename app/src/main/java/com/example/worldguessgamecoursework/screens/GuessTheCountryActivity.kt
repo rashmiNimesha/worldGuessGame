@@ -231,7 +231,7 @@ fun GuessTheCountryScreen() {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Correct Answer : ${randomFlagDisplay.flagName}",
-                        color = Color.Red,
+                        color = Color.Blue,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -278,7 +278,7 @@ fun GuessTheCountryScreen() {
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     textDecoration = if (flag.flagName == selectedFlagName) TextDecoration.Underline else TextDecoration.None,
-                    color = if (flag.flagName == selectedFlagName) Color.Blue else Color.Black,
+                    color = if (flag.flagName == selectedFlagName) Color.Magenta else Color.Black,
                     modifier = Modifier
                         .clickable {
                             if (!showResult) {
