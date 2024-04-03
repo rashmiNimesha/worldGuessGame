@@ -47,7 +47,6 @@ class AdvancedLevelActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AdvancedLevelScreen()
-
         }
     }
 }

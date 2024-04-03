@@ -58,15 +58,19 @@ fun GuessTheFlagScreen(timerCountdown : Boolean) {
     var timer by remember { mutableStateOf(10) }
 
     var timerrunning by remember { mutableStateOf(true) }
-    LaunchedEffect(key1 = timer, timerrunning) {
-        while (timerrunning && timer > 1) {
-            delay(1000)
-            timer--
-        }
+
+    if(timerCountdown){
+        LaunchedEffect(key1 = timer, timerrunning) {
+            while (timerrunning && timer > 1) {
+                delay(1000)
+                timer--
+            }
 //        if (timerSeconds == 0) {
 //            message = "Time's up!"
 //        }
+        }
     }
+
 
     LazyColumn(
         modifier = Modifier

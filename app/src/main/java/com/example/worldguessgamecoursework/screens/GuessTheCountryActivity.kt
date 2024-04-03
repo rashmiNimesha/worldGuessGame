@@ -63,22 +63,24 @@ fun GuessTheCountryScreen(timerCountdown : Boolean) {
     var result by remember { mutableStateOf(false) }
     var timer by remember { mutableStateOf(10) }
 
-
-
-    LaunchedEffect(key1 = timer) { //countdown 10 to 1
-        if (timer > 1) {
-            delay(1000)
-            timer--
-        } else {
-            submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
-                correct
+    if(timerCountdown){
+        LaunchedEffect(key1 = timer) { //countdown 10 to 1
+            if (timer > 1) {
+                delay(1000)
+                timer--
             } else {
-                wrong
-            }
-            result = true
+                submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
+                    correct
+                } else {
+                    wrong
+                }
+                result = true
 
+            }
         }
     }
+
+
 
     LazyColumn(
         modifier = Modifier
@@ -156,8 +158,6 @@ fun GuessTheCountryScreen(timerCountdown : Boolean) {
                     )
                 }
             }
-
-
         }
 
         item {

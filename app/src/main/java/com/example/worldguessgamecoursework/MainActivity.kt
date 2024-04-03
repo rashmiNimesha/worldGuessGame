@@ -39,8 +39,6 @@ import com.example.worldguessgamecoursework.screens.GuessTheCountryActivity
 import com.example.worldguessgamecoursework.screens.GuessTheFlagActivity
 import com.example.worldguessgamecoursework.screens.GuessTheHintActivity
 
-
-
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

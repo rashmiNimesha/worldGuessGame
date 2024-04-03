@@ -64,15 +64,17 @@ fun GuessTheHintScreen(timerCountdown : Boolean) {
     var button by remember { mutableStateOf("Submit") }
     var timer by remember { mutableStateOf(10) }
 
-    LaunchedEffect(key1 = timer) {
-        if (timer > 1) {
-            delay(1000)
-            timer--
-        } else {
-            if (button != "Next") {
-                message = "WRONG!"
-                correctAns = "Correct Answer : $nameOfCountry"
-                button = "Next"
+    if(timerCountdown){
+        LaunchedEffect(key1 = timer) {
+            if (timer > 1) {
+                delay(1000)
+                timer--
+            } else {
+                if (button != "Next") {
+                    message = "WRONG!"
+                    correctAns = "Correct Answer : $nameOfCountry"
+                    button = "Next"
+                }
             }
         }
     }
