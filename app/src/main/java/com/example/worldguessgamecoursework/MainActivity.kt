@@ -217,7 +217,7 @@ fun HomeScreen(onClicked: (String)-> Unit){
                     modifier = Modifier.padding(5.dp)
                 )
                 Text(
-                    text = "Enable Countdown Timer",
+                    text = "Switch",
                     fontSize = 16.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )

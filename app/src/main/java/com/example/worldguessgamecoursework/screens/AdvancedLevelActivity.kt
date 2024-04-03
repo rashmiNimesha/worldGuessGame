@@ -53,37 +53,33 @@ class AdvancedLevelActivity : ComponentActivity() {
 }
 
 @Composable
-fun AdvancedLevelScreen(){
+fun AdvancedLevelScreen() {
     var flagOptions by rememberSaveable { mutableStateOf(generateRandomFlags_()) }
     var guess by remember { mutableStateOf(List(flagOptions.size) { "" }) }
     val (guesses, setGuesses) = remember { mutableStateOf(List(flagOptions.size) { "" }) }
     var msg by remember { mutableStateOf("") }
-    var submit by remember {mutableStateOf(false)}
+    var submit by remember { mutableStateOf(false) }
     var submitCount by remember { mutableStateOf(0) }
     var submitText by remember { mutableStateOf("Submit") }
     var allGuess by remember { mutableStateOf(0) }
     var correctGuess by remember { mutableStateOf(0) }
-    var correct by remember { mutableStateOf("") }
-    
+
 
     fun checkAnswers() {
         var allCorrect = true
         flagOptions.indices.forEach { index ->
             if (!flagOptions[index].flagName.equals(guess[index], ignoreCase = true)) {
                 allCorrect = false
-            }else{
-                correctGuess++
             }
         }
         submit = false
         if (allCorrect) {
-            msg ="Correct !"
+            msg = "Correct !"
             submitCount = 1
-           correctGuess++
             guess = List(flagOptions.size) { "" }
             flagOptions = generateRandomFlags_()
-        }
-        else{
+correctGuess++
+        } else {
             submitCount++
             if (submitCount == 3) {
                 submitText = "Next"
@@ -94,16 +90,19 @@ fun AdvancedLevelScreen(){
 //                flagOptions = generateRandomFlags_()
             }
             msg = "Wrong !"
-            
-        }
 
+
+        }
         allGuess++
+
+
     }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         item {
             Row(
@@ -128,11 +127,13 @@ fun AdvancedLevelScreen(){
                     modifier = Modifier.weight(1f)
                 )
 
-                Text(text = "$correctGuess / $allGuess",
+                Text(
+                    text = "$correctGuess  / $allGuess",
                     modifier = Modifier.padding(10.dp),
                     color = Color.Black,
                     fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,)
+                    fontWeight = FontWeight.Bold,
+                )
 
             }
         }
@@ -239,7 +240,7 @@ fun AdvancedLevelScreen(){
 
                             )
                             .padding(horizontal = 8.dp, vertical = 8.dp)
-                            .width(200.dp),
+                            .width(250.dp),
                         enabled = !guess[index].equals(
                             flagOptions[index].flagName,
                             ignoreCase = true
@@ -291,7 +292,6 @@ fun AdvancedLevelScreen(){
             )
 
         }
-
 
 
     }

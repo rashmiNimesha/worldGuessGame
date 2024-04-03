@@ -65,11 +65,11 @@ fun GuessTheHintScreen(){
     var correctAns by remember { mutableStateOf("") }
     var remainingAttempts by remember { mutableStateOf(3) }
     var buttonText by remember { mutableStateOf("Submit") }
-    var timerSeconds by remember { mutableStateOf(20) }
+    var timerSeconds by remember { mutableStateOf(10) }
 
     LaunchedEffect(key1 = timerSeconds) {
         if (timerSeconds > 0) {
-            delay(2000)
+            delay(1000)
             timerSeconds--
         }
         else {
@@ -257,7 +257,7 @@ fun GuessTheHintScreen(){
                         buttonText = "Submit"
                         remainingAttempts = 3
                         setGuessedLetters(mutableListOf())
-                        timerSeconds =20
+                        timerSeconds =10
                     }
 
                 },
