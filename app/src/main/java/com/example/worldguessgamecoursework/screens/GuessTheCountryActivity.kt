@@ -40,76 +40,42 @@ import com.example.worldguessgamecoursework.data.FlagData
 import com.example.worldguessgamecoursework.data.buttonFontSize
 import com.example.worldguessgamecoursework.data.themeColor
 import kotlinx.coroutines.delay
+import kotlin.concurrent.timer
 
 class GuessTheCountryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GuessTheCountryScreen()
+            val timerCountdown = intent.getBooleanExtra("timer",false)
+            GuessTheCountryScreen(timerCountdown)
+
         }
     }
 }
-// Custom saver for the Flag class
-//fun generateRandomFlag(): Flag {
-//    return FlagData.flagsList.random()
-//}
+
 @Composable
-fun GuessTheCountryScreen() {
-    var randomFlagDisplay by remember { mutableStateOf(FlagData.flagsList.random()) }
-    var selectedFlagName by remember{ mutableStateOf("") }
+fun GuessTheCountryScreen(timerCountdown : Boolean) {
+    var randomFlagDisplay by remember { mutableStateOf(generateRandomFlag()) }
+    var selectedFlagName by remember { mutableStateOf("") }
     var submitResult by remember { mutableStateOf("") }
     val correct = "CORRECT!"
     val wrong = "WRONG!"
-    var showResult by remember { mutableStateOf(false) }
-    // Countdown timer state
-    var timerSeconds by remember { mutableStateOf(10) }
+    var result by remember { mutableStateOf(false) }
+    var timer by remember { mutableStateOf(10) }
 
-//    LaunchedEffect(key1 = timerSeconds) {
-//        if (timerSeconds > 0) {
-//            delay(1000)
-//            timerSeconds--
-//            if(showResult){
-//                if (timerSeconds > 0) {
-//                    delay(1000)
-//                    timerSeconds--
-//                }
-//                else{
-//                    submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
-//                        correct
-//                    } else {
-//                        wrong
-//                    }
-//                    showResult = true
-//                    // Reset timer for the next round
-//
-//                }
-//
-//            }
-//        } else {
-//            // Time's up: Auto-submit
-//            submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
-//                correct
-//            } else {
-//                wrong
-//            }
-//            showResult = false
-//            // Reset timer for the next round
-//            timerSeconds = 10
-//        }
-//    }
 
-    LaunchedEffect(key1 = timerSeconds) {
-        if (timerSeconds > 0) {
+
+    LaunchedEffect(key1 = timer) { //countdown 10 to 1
+        if (timer > 1) {
             delay(1000)
-            timerSeconds--
+            timer--
         } else {
-            // Time's up: Auto-submit
             submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
                 correct
             } else {
                 wrong
             }
-            showResult = true
+            result = true
 
         }
     }
@@ -157,29 +123,40 @@ fun GuessTheCountryScreen() {
         }
 
         item {
-            Row (modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center){
-                Text(text = "Play and Win, Country Flag",
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Play and Win, Country Flag",
                     color = Color(0xFF75A488),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(5.dp)
-                        .align(alignment = Alignment.CenterVertically))
+                        .align(alignment = Alignment.CenterVertically)
+                )
 
             }
         }
         item {
-            Spacer(modifier = Modifier.height(6.dp))
-            // Display the countdown timer
-           Row {
-               Text(text = "Timer : ",
-                   fontWeight = FontWeight.Bold,
-                   fontSize = 18.sp)
-               Text(text = timerSeconds.toString(),
-                   fontWeight = FontWeight.Bold,
-                   fontSize = 18.sp)
-           }
+            // countdown timer
+            if(timerCountdown){
+                Spacer(modifier = Modifier.height(6.dp))
+                Row {
+                    Text(
+                        text = "Timer : ",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = timer.toString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
+            }
+
 
         }
 
@@ -189,22 +166,17 @@ fun GuessTheCountryScreen() {
                 contentDescription = randomFlagDisplay.flagName,
                 modifier = Modifier
                     .size(250.dp)
-                //.clip(shape = RoundedCornerShape(8.dp))
             )
-            //  }
-            // Display the flag image
 
-            //   item {
-            if (!showResult) {
+            if (!result) {
                 Button(
                     onClick = {
-
                         submitResult = if (randomFlagDisplay.flagName == selectedFlagName) {
                             correct
                         } else {
                             wrong
                         }
-                        showResult = true
+                        result = true
 
                     },
                     colors = ButtonDefaults.buttonColors(themeColor),
@@ -241,11 +213,11 @@ fun GuessTheCountryScreen() {
 
                 Button(
                     onClick = {
-                        timerSeconds =10
+                        timer = 10
                         randomFlagDisplay = FlagData.flagsList.random()
                         selectedFlagName = ""
                         submitResult = ""
-                        showResult = false
+                        result = false
 
 
                     },
@@ -265,14 +237,7 @@ fun GuessTheCountryScreen() {
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-            //  }
-
-            //     item {
-
-            // Display list of flag names
-//            LazyColumn() {
-//                item {
-            FlagData.flagsList.forEach { flag ->
+            FlagData.flagsList.forEach { flag ->       // display all flag names listed on flagList in Flag class
                 Text(
                     text = flag.flagName,
                     fontWeight = FontWeight.Bold,
@@ -281,7 +246,7 @@ fun GuessTheCountryScreen() {
                     color = if (flag.flagName == selectedFlagName) Color.Magenta else Color.Black,
                     modifier = Modifier
                         .clickable {
-                            if (!showResult) {
+                            if (!result) {
                                 selectedFlagName = flag.flagName
 
                             }

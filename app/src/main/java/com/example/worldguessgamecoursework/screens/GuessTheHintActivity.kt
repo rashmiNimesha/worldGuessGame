@@ -43,42 +43,36 @@ class GuessTheHintActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GuessTheHintScreen()
+            val timerCountdown = intent.getBooleanExtra("timer",false)
+            GuessTheHintScreen(timerCountdown)
         }
     }
 }
 
 @Composable
-fun GuessTheHintScreen(){
+fun GuessTheHintScreen(timerCountdown : Boolean) {
     var randomFlagDisplay by remember { mutableStateOf(generateRandomFlag()) }
-    val countryName = randomFlagDisplay.flagName
+    val nameOfCountry = randomFlagDisplay.flagName
     val (guess, setGuess) = remember { mutableStateOf("") }
     val (guessedLetters, setGuessedLetters) = remember { mutableStateOf(mutableListOf<Char>()) }
-
-    // var countryNameHas = countryName.map { if (it.isLetter()) "_" else it }.joinToString("    ")
-    // var dashesCountryName = countryNameHas.value
-    var countryNameHas = remember { mutableStateOf(countryName.map { if (it.isLetter()) "_" else it }.joinToString(" ")) }
-//      var dashesCountryName by remember {
-//          mutableStateOf(countryNameHas.value)
-//      }
+    var countryNameHas = remember {
+        mutableStateOf(nameOfCountry.map { if (it.isLetter()) "_" else it }.joinToString(" "))
+    }
     var message by remember { mutableStateOf("") }
     var correctAns by remember { mutableStateOf("") }
-    var remainingAttempts by remember { mutableStateOf(3) }
-    var buttonText by remember { mutableStateOf("Submit") }
-    var timerSeconds by remember { mutableStateOf(10) }
+    var attempts by remember { mutableStateOf(3) }
+    var button by remember { mutableStateOf("Submit") }
+    var timer by remember { mutableStateOf(10) }
 
-    LaunchedEffect(key1 = timerSeconds) {
-        if (timerSeconds > 0) {
+    LaunchedEffect(key1 = timer) {
+        if (timer > 1) {
             delay(1000)
-            timerSeconds--
-        }
-        else {
-            // If the timer reaches 0
-            if (buttonText != "Next") {
-                // Display "WRONG!" message and correct answer
+            timer--
+        } else {
+            if (button != "Next") {
                 message = "WRONG!"
-                correctAns = "Correct Answer : $countryName"
-                buttonText = "Next"
+                correctAns = "Correct Answer : $nameOfCountry"
+                button = "Next"
             }
         }
     }
@@ -107,9 +101,7 @@ fun GuessTheHintScreen(){
                     color = Color.Black,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-
-
-                    )
+                )
                 Spacer(
                     modifier = Modifier.weight(1f)
                 )
@@ -142,15 +134,21 @@ fun GuessTheHintScreen(){
             }
         }
         item {
-            Spacer(modifier = Modifier.height(6.dp))
-            // Display the countdown timer
-            Row {
-                Text(text = "Timer : ",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp)
-                Text(text = timerSeconds.toString(),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp)
+            if(timerCountdown){
+                Spacer(modifier = Modifier.height(6.dp))
+                Row {
+                    Text(
+                        text = "Timer : ",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = timer.toString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
+
             }
 
         }
@@ -165,7 +163,6 @@ fun GuessTheHintScreen(){
         }
 
         item {
-
             Text(
                 text = countryNameHas.value,
                 modifier = Modifier.padding(bottom = 36.dp)
@@ -174,16 +171,18 @@ fun GuessTheHintScreen(){
         }
 
         item {
-            // Text field for user input
             TextField(
                 value = guess,
                 onValueChange =
                 { newValue ->
-                    setGuess(newValue.takeLast(1)) // Take the last character entered
-                    if (newValue.length > guess.length ) { // Check if a new character was added
-                        val enteredChar = newValue.last().lowercaseChar()
-                        if (enteredChar in countryName) {
-                            val updatedString = countryName.map { if (it.lowercaseChar() == enteredChar) enteredChar else "_" }.joinToString(" ")
+                    setGuess(newValue.takeLast(1)) //only one char can get last char
+                    if (newValue.length > guess.length) {
+                        val enteredChar =
+                            newValue.last().lowercaseChar() // assign new val into enterchar
+                        if (enteredChar in nameOfCountry) {    // check enter char in country name
+                            val updatedString =
+                                nameOfCountry.map { if (it.lowercaseChar() == enteredChar) enteredChar else "_" }
+                                    .joinToString(" ")
                             countryNameHas.value = updatedString
                             if (!updatedString.contains("_")) {
                                 message = "Correct!"
@@ -200,64 +199,52 @@ fun GuessTheHintScreen(){
         }
 
         item {
-            // Button to submit guess
-
             Button(
                 onClick = {
-                    if (buttonText == "Submit") {
+                    if (button == "Submit") {
                         if (guess.isNotBlank()) {
                             val guessedCountry = countryNameHas.value.replace(" ", "").lowercase()
-
-
-                            if (guessedCountry.lowercase() == countryName.lowercase()) {
-                                buttonText = "Next"
-
-
+                            if (guessedCountry.lowercase() == nameOfCountry.lowercase()) {
+                                button = "Next"
                             } else {
                                 val guessedChar = guess.first().lowercaseChar()
-                                if (guessedChar in countryName) {
-                                    // Update guessed characters list
-                                    setGuessedLetters((guessedLetters + guessedChar).toMutableList())
-                                    // Update countryNameHas immediately
-                                    val updatedString = countryName.map {
+                                if (guessedChar in nameOfCountry) {
+
+                                    setGuessedLetters((guessedLetters + guessedChar).toMutableList())  //update list
+                                    val updatedString = nameOfCountry.map {
                                         if (it.lowercaseChar() in guessedLetters || it.lowercaseChar() == guessedChar) it else "_"
                                     }.joinToString(" ")
                                     countryNameHas.value = updatedString
                                 } else {
-                                    remainingAttempts--
-                                    if (remainingAttempts == 0) {
+                                    attempts--
+                                    if (attempts == 0) {
                                         message = "WRONG!"
-                                        correctAns = "Correct Answer : ${countryName}"
-                                        buttonText = "Next"
+                                        correctAns = "Correct Answer : ${nameOfCountry}"
+                                        button = "Next"
 
 
                                     }
                                 }
-
-                                // Clear the guess text field
-                                setGuess("")
+                                setGuess("")   // text feild clear
                                 if (!countryNameHas.value.contains("_")) {
                                     message = "Correct !"
-                                    buttonText = "Next"
+                                    button = "Next"
 
                                 }
 
-
                             }
-
-
                         }
-                    }
-                    else if(buttonText == "Next"){
-
+                    } else if (button == "Next") {
                         randomFlagDisplay = generateRandomFlag()
-                        countryNameHas.value = randomFlagDisplay.flagName.map { if (it.isLetter()) "_" else it }.joinToString(" ")
+                        countryNameHas.value =
+                            randomFlagDisplay.flagName.map { if (it.isLetter()) "_" else it }
+                                .joinToString(" ")
                         message = ""
                         correctAns = ""
-                        buttonText = "Submit"
-                        remainingAttempts = 3
-                        setGuessedLetters(mutableListOf())
-                        timerSeconds =10
+                        button = "Submit"
+                        attempts = 3
+                        setGuessedLetters(mutableListOf())   // previously get letters clear (reset)
+                        timer = 10
                     }
 
                 },
@@ -270,7 +257,7 @@ fun GuessTheHintScreen(){
 
             ) {
                 Text(
-                    buttonText,
+                    button,
                     fontSize = buttonFontSize,
                     style = TextStyle(fontWeight = FontWeight.Bold),
                     color = Color.White
@@ -280,19 +267,23 @@ fun GuessTheHintScreen(){
 
         }
         item {
-            Text(text = message,
-                color = if (message=="Correct !") Color.Green else Color.Red,
+            Text(
+                text = message,
+                color = if (message == "Correct !") Color.Green else Color.Red,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,)
+                fontSize = 18.sp,
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
         }
 
         item {
-            Text(text = correctAns,
-                color= Color.Blue,
+            Text(
+                text = correctAns,
+                color = Color.Blue,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,)
+                fontSize = 18.sp,
+            )
         }
     }
 }

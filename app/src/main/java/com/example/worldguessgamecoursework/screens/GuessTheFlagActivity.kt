@@ -43,202 +43,171 @@ class GuessTheFlagActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GuessTheFlagScreen()
+            val timerCountdown = intent.getBooleanExtra("timer",false)
+            GuessTheFlagScreen(timerCountdown)
         }
     }
 }
 
 @Composable
-fun GuessTheFlagScreen() {
-
-
-        var currentFlag by remember { mutableStateOf(FlagData.flagsList.random()) }
-        var flagOptions by remember { mutableStateOf(generateOptions(currentFlag)) }
-        var showMessage by remember { mutableStateOf(false) }
-        var message by remember { mutableStateOf("") }
-    var timerSeconds by remember { mutableStateOf(10) }
+fun GuessTheFlagScreen(timerCountdown : Boolean) {
+    var currentFlag by remember { mutableStateOf(FlagData.flagsList.random()) }
+    var flagOptions by remember { mutableStateOf(generateOptions(currentFlag)) }
+    var showMessage by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf("") }
+    var timer by remember { mutableStateOf(10) }
 
     var timerrunning by remember { mutableStateOf(true) }
-    LaunchedEffect(key1 = timerSeconds, timerrunning) {
-        while (timerrunning && timerSeconds > 0) {
+    LaunchedEffect(key1 = timer, timerrunning) {
+        while (timerrunning && timer > 1) {
             delay(1000)
-            timerSeconds--
+            timer--
         }
 //        if (timerSeconds == 0) {
 //            message = "Time's up!"
 //        }
     }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(18.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFF75A488)),
-                    verticalAlignment = Alignment.CenterVertically,
-
-
-                    ) {
-                    Text(
-                        modifier = Modifier.padding(10.dp),
-                        text = "WorldGuess Game",
-                        fontFamily = FontFamily.SansSerif,
-                        color = Color.Black,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF75A488)),
+                verticalAlignment = Alignment.CenterVertically,
 
 
-                        )
-                    Spacer(
-                        modifier = Modifier.weight(1f)
-                    )
-                    Image(
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(10.dp),
-                        painter = painterResource(id = R.drawable.ad),
-                        contentDescription = ""
-                    )
-
-                }
-            }
-
-            item {
-                Row (modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ){
-                    Text(text = "Play and Win, Guess the Flag",
-                        color = Color(0xFF75A488),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .align(alignment = Alignment.CenterVertically))
-
-                }
-            }
-            item {
-                Spacer(modifier = Modifier.height(6.dp))
-                // Display the countdown timer
-                Row {
-                    Text(text = "Timer : ",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp)
-                    Text(text = timerSeconds.toString(),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp)
-                }
-
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "Find the ${currentFlag.flagName}",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-            }
-
-            item {
-                flagOptions.forEach { flag_ ->
-                    FlagImage(
-                        flag = flag_,
-                        onClick = {
-
-                            showMessage = true
-                         if (flag_.flagName == currentFlag.flagName) {
-                                message = "CORRECT !!"
-                                timerrunning = false
-
-                            } else {
-                                message = "WRONG !! "
-                                timerrunning = false
-
-                            }
-
-
-//                        currentFlag = FlagData.flagsList.random()
-//                        currentOptions = generateOptions(currentFlag)
-                        },
-
-
-                    )
-
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-
-            item {
-                Text(
-                    text = message,
-                    color = if (message == "CORRECT !!") Color.Green else Color.Red,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(15.dp))
-            }
-
-            item {
-                Button(
-                    onClick = {
-                        timerSeconds = 10
-                        timerrunning= true
-                        currentFlag = FlagData.flagsList.random()
-                        flagOptions = generateOptions(currentFlag)
-                        message = ""
-                    },
-                    colors = ButtonDefaults.buttonColors(themeColor),
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .width(150.dp)
-                        .height(40.dp)
                 ) {
-                    Text(
-                        text = "Next",
-                        fontSize = buttonFontSize,
-                        style = TextStyle(fontWeight = FontWeight.Bold),
-                        color = Color.White,
+                Text(
+                    modifier = Modifier.padding(10.dp),
+                    text = "WorldGuess Game",
+                    fontFamily = FontFamily.SansSerif,
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+
+
                     )
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Image(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(10.dp),
+                    painter = painterResource(id = R.drawable.ad),
+                    contentDescription = ""
+                )
 
-                }
             }
-
-
         }
 
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Play and Win, Guess the Flag",
+                    color = Color(0xFF75A488),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .align(alignment = Alignment.CenterVertically)
+                )
 
-//
-//    @Composable
-//    fun FlagImage(flag: Flag, onClick: () -> Unit) {
-//        Image(
-//            painter = painterResource(id = flag.imagePath),
-//            contentDescription = flag.flagName,
-//            modifier = Modifier
-//                .size(150.dp)
-//                .clickable(onClick = onClick),
-//
-//
-//            )
-//    }
-//
-//    fun generateOptions(currentFlag_: Flag): List<Flag> {
-//        val options = mutableListOf(currentFlag_)
-//        while (options.size < 3) {
-//            val randomDog = FlagData.flagsList.random()
-//            if (randomDog !in options) {
-//                options.add(randomDog)
-//            }
-//        }
-//        return options.shuffled()
-//    }
+            }
+        }
+        item {
+            if(timerCountdown){
+                Spacer(modifier = Modifier.height(6.dp))
+                Row {
+                    Text(
+                        text = "Timer : ",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = timer.toString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
+            }
+        }
 
+        item {
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "Find the ${currentFlag.flagName}",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+
+        item {      // display 3 random flags
+            flagOptions.forEach { flag_ ->
+                FlagImage(
+                    flag = flag_,
+                    onClick = {
+                        showMessage = true
+                        if (flag_.flagName == currentFlag.flagName) {
+                            message = "CORRECT !!"
+                            timerrunning = false
+
+                        } else {
+                            message = "WRONG !! "
+                            timerrunning = false
+
+                        }
+                    },
+                    )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+        item {
+            Text(
+                text = message,
+                color = if (message == "CORRECT !!") Color.Green else Color.Red,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+
+        item {
+            Button(
+                onClick = {
+                    timer = 10
+                    timerrunning = true
+                    currentFlag = FlagData.flagsList.random()
+                    flagOptions = generateOptions(currentFlag)
+                    message = ""
+                },
+                colors = ButtonDefaults.buttonColors(themeColor),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .width(150.dp)
+                    .height(40.dp)
+            ) {
+                Text(
+                    text = "Next",
+                    fontSize = buttonFontSize,
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    color = Color.White,
+                )
+
+            }
+        }
+    }
 
 }

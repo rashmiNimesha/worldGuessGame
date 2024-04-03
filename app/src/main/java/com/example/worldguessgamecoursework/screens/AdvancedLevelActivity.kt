@@ -56,11 +56,10 @@ class AdvancedLevelActivity : ComponentActivity() {
 fun AdvancedLevelScreen() {
     var flagOptions by rememberSaveable { mutableStateOf(generateRandomFlags_()) }
     var guess by remember { mutableStateOf(List(flagOptions.size) { "" }) }
-    val (guesses, setGuesses) = remember { mutableStateOf(List(flagOptions.size) { "" }) }
     var msg by remember { mutableStateOf("") }
     var submit by remember { mutableStateOf(false) }
     var submitCount by remember { mutableStateOf(0) }
-    var submitText by remember { mutableStateOf("Submit") }
+    var button by remember { mutableStateOf("Submit") }
     var allGuess by remember { mutableStateOf(0) }
     var correctGuess by remember { mutableStateOf(0) }
 
@@ -78,20 +77,13 @@ fun AdvancedLevelScreen() {
             submitCount = 1
             guess = List(flagOptions.size) { "" }
             flagOptions = generateRandomFlags_()
-correctGuess++
+            correctGuess++
         } else {
             submitCount++
             if (submitCount == 3) {
-                submitText = "Next"
-
-
-                // Reset guesses for new game
-//                guess = List(flagOptions.size) { "" }
-//                flagOptions = generateRandomFlags_()
+                button = "Next"
             }
             msg = "Wrong !"
-
-
         }
         allGuess++
 
@@ -198,8 +190,7 @@ correctGuess++
             Spacer(modifier = Modifier.height(40.dp))
 
 
-            flagOptions.forEachIndexed { index, _ ->
-                //  FlagInputRow(index = index)
+            flagOptions.forEachIndexed { index, _ ->    // text boxes take texts
                 Row {
                     Text(
                         text = "(${index + 1})",
@@ -210,23 +201,21 @@ correctGuess++
                     TextField(
                         value = guess[index],
                         onValueChange = { newValue ->
-
-                            // Update guess
-                            if (!submit) {
+                            if (!submit) {    // update guess text box fill out
                                 guess = guess.toMutableList().also { it[index] = newValue }
                             }
 
                         },
                         modifier = Modifier
                             .padding(bottom = 20.dp)
-                            .background(
+                            .background(        // correct answer background gray
                                 if (guess[index].equals(
                                         flagOptions[index].flagName,
                                         ignoreCase = true
                                     )
                                 ) Color.Gray else Color.White
                             )
-                            .border(
+                            .border(         // correct answer border green
                                 BorderStroke(
                                     1.dp,
                                     if (guess[index].equals(
@@ -241,7 +230,7 @@ correctGuess++
                             )
                             .padding(horizontal = 8.dp, vertical = 8.dp)
                             .width(250.dp),
-                        enabled = !guess[index].equals(
+                        enabled = !guess[index].equals(      // can change wrong answers
                             flagOptions[index].flagName,
                             ignoreCase = true
                         )
@@ -254,11 +243,11 @@ correctGuess++
         item {
             Button(
                 onClick = {
-                    if (submitText == "Submit") {
+                    if (button == "Submit") {
                         checkAnswers()
 
                     } else {
-                        submitText = "Submit"
+                        button = "Submit"
                         submitCount = 0
                         msg = ""
                         guess = List(flagOptions.size) { "" }
@@ -274,7 +263,7 @@ correctGuess++
 
             ) {
                 Text(
-                    text = submitText,
+                    text = button,
                     fontSize = buttonFontSize,
                     style = TextStyle(fontWeight = FontWeight.Bold),
                     color = Color.White
@@ -292,8 +281,6 @@ correctGuess++
             )
 
         }
-
-
     }
 }
 
